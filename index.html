@@ -73,6 +73,35 @@ gap: 20px; width: 100%;
 }
 .lang-btn:hover, .lang-btn.active { background: #000; color: #fff; }
 
+/* PRZYCISK PRAW autorskich */
+.legal-btn { 
+    font-size: 11px; color: #777; text-decoration: underline; cursor: pointer; 
+    margin-top: 25px; transition: color 0.2s; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+}
+.legal-btn:hover { color: #000; }
+
+/* --- EKRAN ZASTRZEŻEŃ PRAWNYCH --- */
+#legal-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+    z-index: 400; display: none; align-items: center; justify-content: center;
+    pointer-events: auto; opacity: 0; transition: opacity 0.3s ease;
+}
+#legal-box {
+    position: relative; background: #fff; border: 2px solid #000; padding: 40px; 
+    border-radius: 5px; max-width: 750px; max-height: 80vh; overflow-y: auto; text-align: left; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+#close-legal-btn {
+    position: absolute; top: 15px; right: 20px; font-size: 32px; font-weight: bold;
+    color: #000; cursor: pointer; transition: transform 0.2s, color 0.2s;
+    line-height: 1; user-select: none;
+}
+#close-legal-btn:hover { transform: scale(1.2); color: #666; }
+.legal-content h2 { font-size: 16px; font-weight: 800; text-transform: uppercase; margin-top: 0; color: #000; letter-spacing: 1px;}
+.legal-content p, .legal-content li { font-size: 12px; line-height: 1.6; color: #333; margin-bottom: 12px; text-align: justify; font-weight: 500; }
+.legal-content ul { padding-left: 20px; margin-bottom: 12px; }
+
 </style>
 <script type="importmap">
 {
@@ -89,13 +118,41 @@ gap: 20px; width: 100%;
 <div id="start-overlay">
     <div class="info-box">
         <div id="close-btn">&times;</div>
-        <!-- Główne logo dodane w ramce -->
+        <!-- Główne logo -->
         <img src="mc_logo_kolo.png" alt="Logo Monochord" class="logo">
         <h1 id="modal-title">Monochord Immersyjny</h1>
         <p id="modal-desc">„Monochord Immersyjny” to innowacyjna, modułowa kabina łącząca funkcję profesjonalnego studia 3D (Dolby Atmos/Dante) z wirtualnym instrumentem. Dzięki kamerom głębi i systemom trackingu, swobodny ruch ciała artysty generuje i pozycjonuje dźwięk w przestrzeni. Projekt zrealizowano w ramach stypendium KPO.</p>
         <div class="lang-btns">
             <button class="lang-btn active" id="btn-pl">Polski</button>
             <button class="lang-btn" id="btn-en">English</button>
+        </div>
+        <!-- Nowy przycisk legal -->
+        <div class="legal-btn" id="btn-legal">Copyright & Legal Notice</div>
+    </div>
+</div>
+
+<!-- WARSTWA ZASTRZEŻEŃ PRAWNYCH -->
+<div id="legal-overlay">
+    <div id="legal-box">
+        <div id="close-legal-btn">&times;</div>
+        <div class="legal-content">
+            <h2>Zastrzeżenia prawne i prawa autorskie</h2>
+            <p>Wszelkie prawa do projektu zatytułowanego „Monochord Immersyjny: Przestrzeń, Dźwięk, Interakcja” są ściśle zastrzeżone na rzecz jego twórcy, Jana Miklaszewskiego. Ochronie podlegają w szczególności dwa niezależne obszary własności intelektualnej:</p>
+            <ul>
+                <li><strong>Prawa do pomysłu kabiny muzycznej:</strong> Koncepcja funkcjonalno-technologiczna interaktywnej kabiny, pełniącej rolę instrumentu muzycznego sterowanego ruchem (z wykorzystaniem systemów trackingu i kamer) oraz zintegrowanego środowiska do reżyserii dźwięku przestrzennego, stanowi wyłączny przedmiot autorskich praw majątkowych i osobistych twórcy.</li>
+                <li><strong>Prawa do koncepcji architektonicznej:</strong> Odrębnej ochronie prawnej podlega autorski projekt architektoniczny, konstrukcyjny oraz wzorniczy prefabrykowanej, modułowej bryły obiektu.</li>
+            </ul>
+            <p>Kopiowanie, powielanie, modyfikowanie, wdrażanie do produkcji, tworzenie utworów zależnych lub wykorzystywanie komercyjne całości bądź jakiegokolwiek fragmentu koncepcji technologicznej, merytorycznej oraz architektonicznej bez uprzedniej, wyraźnej zgody autora wyrażonej na piśmie jest surowo zabronione. Wszelkie naruszenia będą stanowić podstawę do dochodzenia roszczeń na mocy przepisów ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych oraz ustawy o zwalczaniu nieuczciwej konkurencji.</p>
+            
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ccc;">
+
+            <h2>Copyright & Legal Notice</h2>
+            <p>All rights to the project entitled "Immersive Monochord: Space, Sound, Interaction" are strictly reserved to its creator, Jan Miklaszewski. Two independent areas of intellectual property are subject to particular protection:</p>
+            <ul>
+                <li><strong>Rights to the music cabin concept:</strong> The functional and technological concept of the interactive cabin, serving as a motion-controlled musical instrument (using tracking systems and cameras) and an integrated environment for spatial sound direction, is the exclusive subject of the creator's personal and economic copyrights.</li>
+                <li><strong>Rights to the architectural concept:</strong> The original architectural, structural, and design project of the prefabricated, modular body of the object is subject to separate legal protection.</li>
+            </ul>
+            <p>Copying, reproducing, modifying, implementing into production, creating derivative works, or commercial use of the entirety or any part of the technological, substantive, and architectural concept without the prior express written consent of the author is strictly prohibited. Any violations will constitute grounds for pursuing claims under the provisions of the Act of February 4, 1994, on copyright and related rights, and the Act on combating unfair competition.</p>
         </div>
     </div>
 </div>
@@ -158,7 +215,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 // ==========================================
-// ZMIENNE GLOBALNE (przesunięte na samą górę, by uniknąć błędu ładowania)
+// ZMIENNE GLOBALNE
 // ==========================================
 let currentLang = 'pl';
 let hasStarted = false; 
@@ -459,17 +516,17 @@ function setLanguage(lang) {
         s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
     });
 
-    // Wymuś odświeżenie tekstów w ramce hovera z boku
     if (pinnedObject && side && side.style.display === 'block') {
         sT.innerText = pinnedObject.userData.title;
         sD.innerText = pinnedObject.userData.desc;
     }
 }
 
-// Inicjalizacja języka (skrypt już nie wysypie się na zmiennych z dołu)
 setLanguage('pl');
 
-// Zdarzenia przycisków
+// ==========================================
+// ZDARZENIA UI (PRZYCISKI STARTOWE)
+// ==========================================
 document.getElementById('btn-pl').addEventListener('click', () => {
     document.getElementById('btn-pl').classList.add('active');
     document.getElementById('btn-en').classList.remove('active');
@@ -488,6 +545,20 @@ document.getElementById('close-btn').addEventListener('click', () => {
     document.getElementById('start-overlay').style.opacity = '0';
     setTimeout(() => { document.getElementById('start-overlay').style.display = 'none'; }, 500);
     hasStarted = true;
+});
+
+// Prawa Autorskie Otwórz
+document.getElementById('btn-legal').addEventListener('click', () => {
+    const lo = document.getElementById('legal-overlay');
+    lo.style.display = 'flex';
+    setTimeout(() => { lo.style.opacity = '1'; }, 10);
+});
+
+// Prawa Autorskie Zamknij
+document.getElementById('close-legal-btn').addEventListener('click', () => {
+    const lo = document.getElementById('legal-overlay');
+    lo.style.opacity = '0';
+    setTimeout(() => { lo.style.display = 'none'; }, 300);
 });
 
 // ==========================================
