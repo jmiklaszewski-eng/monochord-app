@@ -14,18 +14,9 @@ body { margin: 0; overflow: hidden; background-color: var(--bg); font-family: 'H
 
 /* PRZYCISK RESET - PRAWY GÓRNY RÓG */
 #reset-btn { 
-position: absolute; 
-top: 20px; 
-right: 30px; 
-pointer-events: auto; 
-font-size: 11px; 
-font-weight: 800; 
-text-transform: uppercase; 
-cursor: pointer; 
-border-bottom: 2px solid #000; 
-padding-bottom: 2px; 
-letter-spacing: 1px; 
-z-index: 100;
+position: absolute; top: 20px; right: 30px; pointer-events: auto; font-size: 11px; 
+font-weight: 800; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid #000; 
+padding-bottom: 2px; letter-spacing: 1px; z-index: 100;
 }
 #reset-btn:hover { color: #666; border-color: #666; }
 
@@ -46,21 +37,14 @@ button.active .dot, button.looping .dot { background: #000; box-shadow: none; }
 #side-desc { font-size: 11px; line-height: 1.6; color: #000; white-space: pre-line; text-align: right; margin-top: 5px; font-weight: 500; }
 
 #footer {
-position: absolute;
-bottom: 20px;
-left: 50%;
-transform: translateX(-50%);
-pointer-events: none;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 20px;
-width: 100%;
+position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+pointer-events: none; display: flex; align-items: center; justify-content: center;
+gap: 20px; width: 100%;
 }
 #footer img { max-width: 320px; height: auto; }
 #footer p { font-size: 12px; color: #666; margin: 0; font-weight: 600; max-width: 350px; text-align: left; text-transform: none; }
 
-/* --- NOWY EKRAN STARTOWY (INFO + JĘZYK) --- */
+/* --- EKRAN STARTOWY (INFO + JĘZYK) --- */
 #start-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(244, 244, 244, 0.85); backdrop-filter: blur(8px);
@@ -78,6 +62,7 @@ width: 100%;
     line-height: 1; user-select: none;
 }
 #close-btn:hover { transform: scale(1.2); color: #666; }
+.info-box img.logo { height: 75px; margin-bottom: 20px; pointer-events: none; }
 .info-box h1 { margin: 0 0 15px 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
 .info-box p { font-size: 14px; line-height: 1.6; font-weight: 500; color: #333; margin-bottom: 30px; text-align: justify; min-height: 90px;}
 .lang-btns { display: flex; gap: 20px; justify-content: center; }
@@ -104,6 +89,8 @@ width: 100%;
 <div id="start-overlay">
     <div class="info-box">
         <div id="close-btn">&times;</div>
+        <!-- Główne logo dodane w ramce -->
+        <img src="mc_logo_kolo.png" alt="Logo Monochord" class="logo">
         <h1 id="modal-title">Monochord Immersyjny</h1>
         <p id="modal-desc">„Monochord Immersyjny” to innowacyjna, modułowa kabina łącząca funkcję profesjonalnego studia 3D (Dolby Atmos/Dante) z wirtualnym instrumentem. Dzięki kamerom głębi i systemom trackingu, swobodny ruch ciała artysty generuje i pozycjonuje dźwięk w przestrzeni. Projekt zrealizowano w ramach stypendium KPO.</p>
         <div class="lang-btns">
@@ -171,6 +158,17 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 // ==========================================
+// ZMIENNE GLOBALNE (przesunięte na samą górę, by uniknąć błędu ładowania)
+// ==========================================
+let currentLang = 'pl';
+let hasStarted = false; 
+const side = document.getElementById('sidebar');
+const sT = document.getElementById('side-title');
+const sD = document.getElementById('side-desc');
+let pinnedObject = null; 
+let isHovering = false;
+
+// ==========================================
 // BAZA TŁUMACZEŃ (PL / EN)
 // ==========================================
 const i18n = {
@@ -180,14 +178,11 @@ const i18n = {
         mainTitle: "MONOCHORD<br>IMMERSYJNY",
         reset: "RESET",
         footer: "„Przedsięwzięcie sfinansowane przez Unię Europejską NextGenerationEU w ramach programu Krajowego Planu Odbudowy”",
-        // Menu Sections
         sArch: "Architektura", sEquip: "Wyposażenie", sZones: "Strefy Emisji", sSim: "Symulacja Audio (Wizualna)",
-        // Menu Buttons
         btnWalls: "Bryła Kabiny", btnFloor: "Podłoga", btnSeat: "Widok z Fotela", btnOut: "Widok z Zewnątrz",
         btnRack: "Rack Produkcyjny", btnPanels: "Panele Akustyczne", btnDiffuser: "Dyfuzor QRD", btnTrackers: "OptiTrack (Inside)", btnChair: "Fotel", btnVR: "Gogle VR",
         btnZenit: "Zenit High", btnSky: "Sky Layer", btnMain: "Ear-Level", btnGround: "Ground / WFS", btnNadir: "Nadir DBA",
         btnHeli: "Helikopter Scan", btnCity: "City Traffic", btnChaos: "Stress Test",
-        // Object Descriptions
         oGridT: "Podłoga Techniczna", oGridD: "Ażurowa platforma stalowa (Grid).\nNośność: 500 kg/m².\nZapewnia pełną transparentność akustyczną dla subwooferów DBA umieszczonych poniżej.",
         oRackT: "Rack Produkcyjny (Mastering Grade)", oRackD: "Sercem studia jest zaawansowany system przetwarzania audio:\n\n• SYSTEM CORE: Trinnov Altitude 32 (64-ch, 24bit/192kHz) z technologią 3D Loudspeaker Remapping.\n• INTERFACE: Antelope Galaxy 64 Synergy Core (Dante/HDX/Thunderbolt, 133dB DNR).\n• PREAMPS A: Millennia HV-3D-8 (Transformerless Class-A, dla nagrań klasycznych).\n• PREAMPS B: Rupert Neve Designs 5024 (Custom Transformers, z kontrolą Silk Texture).\n• CLOCK: Antelope 10M Atomic Clock (Rubidium, 0.03 ppb).\n• POWER: Furman IT-Reference 16Ei (Discrete Symmetrical Power).",
         oDiffT: "Dyfuzor QRD 2D", oDiffD: "Vicoustic Multifuser DC3.\nTyp: Dwuwymiarowy dyfuzor typu Quadratic Residue.\nZakres działania: 470 Hz – 10 kHz.\nFunkcja: Rozpraszanie fazowe fal, eliminacja echa trzepoczącego (flutter echo) przy zachowaniu żywotności akustycznej pomieszczenia.",
@@ -207,14 +202,11 @@ const i18n = {
         mainTitle: "IMMERSIVE<br>MONOCHORD",
         reset: "RESET",
         footer: "The project is funded by the European Union NextGenerationEU under the National Recovery Plan.",
-        // Menu Sections
         sArch: "Architecture", sEquip: "Equipment", sZones: "Emission Zones", sSim: "Audio Simulation (Visual)",
-        // Menu Buttons
         btnWalls: "Cabin Shell", btnFloor: "Floor", btnSeat: "Seat View", btnOut: "Outside View",
         btnRack: "Production Rack", btnPanels: "Acoustic Panels", btnDiffuser: "QRD Diffuser", btnTrackers: "OptiTrack (Inside)", btnChair: "Chair", btnVR: "VR Headset",
         btnZenit: "Zenith High", btnSky: "Sky Layer", btnMain: "Ear-Level", btnGround: "Ground / WFS", btnNadir: "Nadir DBA",
         btnHeli: "Helicopter Scan", btnCity: "City Traffic", btnChaos: "Stress Test",
-        // Object Descriptions
         oGridT: "Technical Floor", oGridD: "Openwork steel platform.\nLoad capacity: 500 kg/m².\nEnsures full acoustic transparency for low frequencies from the DBA subwoofers located below.",
         oRackT: "Production Rack (Mastering Grade)", oRackD: "The heart of the studio is an advanced audio processing system:\n\n• SYSTEM CORE: Trinnov Altitude 32 (64-ch, 24bit/192kHz) with 3D Loudspeaker Remapping technology.\n• INTERFACE: Antelope Galaxy 64 Synergy Core (Dante/HDX/Thunderbolt, 133dB DNR).\n• PREAMPS A: Millennia HV-3D-8 (Transformerless Class-A, for classical recordings).\n• PREAMPS B: Rupert Neve Designs 5024 (Custom Transformers, with Silk Texture control).\n• CLOCK: Antelope 10M Atomic Clock (Rubidium, 0.03 ppb).\n• POWER: Furman IT-Reference 16Ei (Discrete Symmetrical Power).",
         oDiffT: "QRD 2D Diffuser", oDiffD: "Vicoustic Multifuser DC3.\nType: Two-dimensional Quadratic Residue diffuser.\nOperating range: 470 Hz – 10 kHz.\nFunction: Phase wave scattering, elimination of flutter echo while preserving the acoustic vitality of the room.",
@@ -229,9 +221,6 @@ const i18n = {
         zNadirT: "Nadir DBA Subwoofer", zNadirD: "Frequency response: 16 Hz - 100 Hz.\n15-inch driver, 800W amplifier.\nDouble Bass Array modal control."
     }
 };
-
-let currentLang = 'pl';
-let hasStarted = false; // Zapobiega interakcji, gdy modal jest otwarty
 
 // ==========================================
 // AUDIO SYSTEM
@@ -325,7 +314,7 @@ const p = new THREE.Mesh(new THREE.BoxGeometry(5,130,140), new THREE.MeshStandar
 p.position.set(x, 0+h, z); 
 scene.add(p); interactive.push(p); panels.push({mesh: p, sideId: sideId});
 };
-mkP(-240, 0, "L"); mkP(240, 0, "R"); // Używamy L/R by dynamicznie przypisywać nazwy
+mkP(-240, 0, "L"); mkP(240, 0, "R"); 
 
 const chair = new THREE.Group();
 chair.add(new THREE.Mesh(new THREE.BoxGeometry(40,10,40), new THREE.MeshStandardMaterial({color:0x111111})));
@@ -432,7 +421,7 @@ function setLanguage(lang) {
     document.getElementById('t-s-city').innerText = t.btnCity;
     document.getElementById('t-s-chaos').innerText = t.btnChaos;
 
-    // Obiekty 3D (Zapis do UserData używanych przez Hover Menu)
+    // Obiekty 3D (Zapis do UserData)
     grid.userData = { title: t.oGridT, desc: t.oGridD };
     rack.userData = { title: t.oRackT, desc: t.oRackD };
     diffuser.userData = { title: t.oDiffT, desc: t.oDiffD };
@@ -465,43 +454,44 @@ function setLanguage(lang) {
         s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
     });
     groups['nadir'].forEach((s, i) => {
-        const side = i === 0 ? (lang === 'pl' ? " Przód" : " Front") : (lang === 'pl' ? " Tył" : " Rear");
-        const info = { title: t.zNadirT + side + ": " + specs['nadir'].name, desc: t.zNadirD };
+        const sideStr = i === 0 ? (lang === 'pl' ? " Przód" : " Front") : (lang === 'pl' ? " Tył" : " Rear");
+        const info = { title: t.zNadirT + sideStr + ": " + specs['nadir'].name, desc: t.zNadirD };
         s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
     });
 
-    // Jeśli otwarty jest sidebar, wymuś jego odświeżenie tekstów
-    if (pinnedObject && side.style.display === 'block') {
+    // Wymuś odświeżenie tekstów w ramce hovera z boku
+    if (pinnedObject && side && side.style.display === 'block') {
         sT.innerText = pinnedObject.userData.title;
         sD.innerText = pinnedObject.userData.desc;
     }
 }
 
-// Inicjalizacja domyślnego języka na start
+// Inicjalizacja języka (skrypt już nie wysypie się na zmiennych z dołu)
 setLanguage('pl');
 
-// Zdarzenia przycisków na modalu
-document.getElementById('btn-pl').onclick = () => {
+// Zdarzenia przycisków
+document.getElementById('btn-pl').addEventListener('click', () => {
     document.getElementById('btn-pl').classList.add('active');
     document.getElementById('btn-en').classList.remove('active');
     setLanguage('pl');
-};
-document.getElementById('btn-en').onclick = () => {
+});
+
+document.getElementById('btn-en').addEventListener('click', () => {
     document.getElementById('btn-en').classList.add('active');
     document.getElementById('btn-pl').classList.remove('active');
     setLanguage('en');
-};
+});
 
-// Start Prezentacji (Kliknięcie Krzyżyka)
-document.getElementById('close-btn').onclick = () => {
-    initA(); // Inicjacja silnika audio po interakcji
+// Zamykanie i Start
+document.getElementById('close-btn').addEventListener('click', () => {
+    try { initA(); } catch(e) { console.warn("Audio init failed", e); }
     document.getElementById('start-overlay').style.opacity = '0';
     setTimeout(() => { document.getElementById('start-overlay').style.display = 'none'; }, 500);
     hasStarted = true;
-};
+});
 
 // ==========================================
-// SYSTEM FAL DŹWIĘKOWYCH & INTERFEJS 
+// SYSTEM FAL DŹWIĘKOWYCH & INTERAKCJE
 // ==========================================
 const waves = []; const headPos = new THREE.Vector3(0, h, 0);
 function fire(s) {
@@ -512,10 +502,7 @@ m.position.copy(s.pos); m.lookAt(headPos); scene.add(m);
 waves.push({ m:m, start:s.pos.clone(), p:0, spd: 0.012 });
 }
 
-// UKRYTO MYSZKĘ POZA EKRAN NA START
 const ray = new THREE.Raycaster(); const mouse = new THREE.Vector2(-1000, -1000);
-const side = document.getElementById('sidebar'), sT = document.getElementById('side-title'), sD = document.getElementById('side-desc');
-let pinnedObject = null; let isHovering = false;
 
 window.addEventListener('mousemove', (e) => { 
 if(!hasStarted) return;
@@ -606,7 +593,6 @@ pinnedObject = null; side.style.display='none';
 function animate() {
 requestAnimationFrame(animate); 
 
-// Kiedy modal z wyborem języka jest widoczny - tylko powoli kręć kamerą z tyłu bez interakcji
 if (!hasStarted) {
     controls.autoRotate = true;
     controls.update();
@@ -614,7 +600,6 @@ if (!hasStarted) {
     return;
 }
 
-// --- SKANOWANIE OBIEKTÓW CO KLATKĘ ---
 if(seatView || (wallMesh && wallMesh.visible)) {
 side.style.display='none';
 document.body.style.cursor = 'default';
@@ -652,7 +637,6 @@ document.body.style.cursor = validHit ? 'pointer' : 'default';
 }
 }
 
-// AUTO-OBRÓT ZATRZYMUJE SIĘ PODCZAS HOVERA LUB SYMULACJI
 controls.autoRotate = !pinnedObject && !mode && !seatView && !isHovering;
 controls.update();
 
