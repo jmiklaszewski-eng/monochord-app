@@ -1,487 +1,682 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>MONOCHORD<br>IMMERSYJNY</title>
-    <style>
-        :root { --bg: #f4f4f4; --text: #000; --sidebar-w: 420px; }
-        body { margin: 0; overflow: hidden; background-color: var(--bg); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: var(--text); user-select: none; }
-        
-        #gui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        
-        #header { position: absolute; top: 20px; left: 30px; pointer-events: auto; display: flex; align-items: center; gap: 15px; }
+<meta charset="UTF-8">
+<title>MONOCHORD IMMERSYJNY</title>
+<style>
+:root { --bg: #f4f4f4; --text: #000; --sidebar-w: 420px; }
+body { margin: 0; overflow: hidden; background-color: var(--bg); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: var(--text); user-select: none; }
+
+#gui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+#header { position: absolute; top: 20px; left: 30px; pointer-events: auto; display: flex; align-items: center; gap: 15px; }
         h1 { margin: 0; font-size: 20px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: #000; }
-        
-        /* PRZYCISK RESET - PRAWY GÓRNY RÓG */
-        #reset-btn { 
-            position: absolute; 
-            top: 20px; 
-            right: 30px; 
-            pointer-events: auto; 
-            font-size: 11px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            border-bottom: 2px solid #000; 
-            padding-bottom: 2px; 
-            letter-spacing: 1px; 
-            z-index: 100;
-        }
-        #reset-btn:hover { color: #666; border-color: #666; }
 
-        #menu { position: absolute; top: 90px; left: 30px; width: 230px; pointer-events: auto; display: flex; flex-direction: column; gap: 12px; }
-        .section { display: flex; flex-direction: column; gap: 2px; }
-        .sec-title { font-size: 9px; font-weight: 800; color: #000; text-transform: uppercase; margin-bottom: 3px; border-bottom: 1px solid #000; padding-bottom: 2px; }
-        
-        button { background: transparent; border: none; border-radius: 0; padding: 2px 0; width: 100%; font-family: inherit; font-size: 10px; font-weight: 600; color: #000; cursor: pointer; text-align: left; transition: color 0.1s; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-        button:hover { color: #666; transform: none; }
-        button.active { font-weight: 800; }
-        button.looping { font-weight: 800; }
-        
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; transition: background 0.2s; }
-        button.active .dot, button.looping .dot { background: #000; box-shadow: none; }
-        
-        #sidebar { position: absolute; top: 80px; right: 40px; width: var(--sidebar-w); pointer-events: auto; text-align: right; display: none; }
-        #side-title { font-size: 24px; font-weight: 800; text-transform: uppercase; color: #000; margin-bottom: 5px; border-bottom: 2px solid #000; padding-bottom: 5px; display: inline-block; }
-        #side-desc { font-size: 11px; line-height: 1.6; color: #000; white-space: pre-line; text-align: right; margin-top: 5px; font-weight: 500; }
+/* PRZYCISK RESET - PRAWY GÓRNY RÓG */
+#reset-btn { 
+position: absolute; 
+top: 20px; 
+right: 30px; 
+pointer-events: auto; 
+font-size: 11px; 
+font-weight: 800; 
+text-transform: uppercase; 
+cursor: pointer; 
+border-bottom: 2px solid #000; 
+padding-bottom: 2px; 
+letter-spacing: 1px; 
+z-index: 100;
+}
+#reset-btn:hover { color: #666; border-color: #666; }
 
-        #footer {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
+#menu { position: absolute; top: 90px; left: 30px; width: 230px; pointer-events: auto; display: flex; flex-direction: column; gap: 12px; }
+.section { display: flex; flex-direction: column; gap: 2px; }
+.sec-title { font-size: 9px; font-weight: 800; color: #000; text-transform: uppercase; margin-bottom: 3px; border-bottom: 1px solid #000; padding-bottom: 2px; }
+
+button { background: transparent; border: none; border-radius: 0; padding: 2px 0; width: 100%; font-family: inherit; font-size: 10px; font-weight: 600; color: #000; cursor: pointer; text-align: left; transition: color 0.1s; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+button:hover { color: #666; transform: none; }
+button.active { font-weight: 800; }
+button.looping { font-weight: 800; }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; transition: background 0.2s; }
+button.active .dot, button.looping .dot { background: #000; box-shadow: none; }
+
+#sidebar { position: absolute; top: 80px; right: 40px; width: var(--sidebar-w); pointer-events: auto; text-align: right; display: none; }
+#side-title { font-size: 24px; font-weight: 800; text-transform: uppercase; color: #000; margin-bottom: 5px; border-bottom: 2px solid #000; padding-bottom: 5px; display: inline-block; }
+#side-desc { font-size: 11px; line-height: 1.6; color: #000; white-space: pre-line; text-align: right; margin-top: 5px; font-weight: 500; }
+
+#footer {
+position: absolute;
+bottom: 20px;
+left: 50%;
+transform: translateX(-50%);
+pointer-events: none;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 20px;
+width: 100%;
 }
-#footer img {
-    max-width: 320px;
-    height: auto;
+#footer img { max-width: 320px; height: auto; }
+#footer p { font-size: 12px; color: #666; margin: 0; font-weight: 600; max-width: 350px; text-align: left; text-transform: none; }
+
+/* --- NOWY EKRAN STARTOWY (INFO + JĘZYK) --- */
+#start-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(244, 244, 244, 0.85); backdrop-filter: blur(8px);
+    z-index: 300; display: flex; align-items: center; justify-content: center;
+    pointer-events: auto; transition: opacity 0.5s ease;
 }
-#footer p {
-    font-size: 12px;
-    color: #666;
-    margin: 0;
-    font-weight: 600;
-    max-width: 350px;
-    text-align: left;
-    text-transform: none;
+.info-box {
+    position: relative; background: #fff; border: 2px solid #000; padding: 40px; 
+    border-radius: 5px; max-width: 600px; text-align: center; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
 }
-        }
-    </style>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
+#close-btn {
+    position: absolute; top: 15px; right: 20px; font-size: 32px; font-weight: bold;
+    color: #000; cursor: pointer; transition: transform 0.2s, color 0.2s;
+    line-height: 1; user-select: none;
+}
+#close-btn:hover { transform: scale(1.2); color: #666; }
+.info-box h1 { margin: 0 0 15px 0; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+.info-box p { font-size: 14px; line-height: 1.6; font-weight: 500; color: #333; margin-bottom: 30px; text-align: justify; min-height: 90px;}
+.lang-btns { display: flex; gap: 20px; justify-content: center; }
+.lang-btn {
+    padding: 10px 25px; font-size: 14px; font-weight: 800; cursor: pointer;
+    border: 2px solid #000; background: transparent; text-transform: uppercase;
+    letter-spacing: 1px; transition: all 0.2s;
+}
+.lang-btn:hover, .lang-btn.active { background: #000; color: #fff; }
+
+</style>
+<script type="importmap">
+{
+"imports": {
+"three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+"three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+}
+}
+</script>
 </head>
 <body>
 
-    <div id="gui">
-        <div id="reset-btn">RESET</div>
-        
-<div id="header">
-            <img src="mc_logo_kolo.png" alt="Logo Lewe" style="max-height: 45px; pointer-events: none;">
-            <h1>MONOCHORD<br>IMMERSYJNY</h1>
-    
-        </div>
-
-        <div id="menu">
-            <div class="section">
-                <div class="sec-title">Architektura</div>
-                <button id="btn-walls">Bryła Kabiny <div class="dot"></div></button>
-                <button id="btn-floor" class="active">Podłoga <div class="dot"></div></button>
-                <button id="btn-seatview">Widok z Fotela <div class="dot"></div></button>
-                <button id="btn-outview">Widok z Zewnątrz <div class="dot"></div></button>
-            </div>
-            <div class="section">
-                <div class="sec-title">Wyposażenie</div>
-                <button id="btn-rack" class="active">Rack Produkcyjny <div class="dot"></div></button>
-                <button id="btn-panels" class="active">Panele Akustyczne <div class="dot"></div></button>
-                <button id="btn-diffuser" class="active">Dyfuzor QRD <div class="dot"></div></button>
-                <button id="btn-trackers" class="active">OptiTrack (Inside) <div class="dot"></div></button>
-                <button id="btn-chair" class="active">Fotel <div class="dot"></div></button>
-                <button id="btn-vr" class="active">Gogle VR <div class="dot"></div></button>
-            </div>
-            <div class="section">
-                <div class="sec-title">Strefy Emisji</div>
-                <button class="zone" data-id="zenit">Zenit High <div class="dot"></div></button>
-                <button class="zone" data-id="sky">Sky Layer <div class="dot"></div></button>
-                <button class="zone" data-id="main">Ear-Level <div class="dot"></div></button>
-                <button class="zone" data-id="ground">Ground / WFS <div class="dot"></div></button>
-                <button class="zone" data-id="nadir">Nadir DBA <div class="dot"></div></button>
-            </div>
-            <div class="section">
-                <div class="sec-title">Symulacja Audio (Wizualna)</div>
-                <button class="sim" id="btn-heli">Helikopter Scan <div class="dot"></div></button>
-                <button class="sim" id="btn-city">City Traffic <div class="dot"></div></button>
-                <button class="sim" id="btn-chaos">Stress Test <div class="dot"></div></button>
-            </div>
-        </div>
-
-        <div id="sidebar">
-            <div id="side-title">ELEMENT</div>
-            <div id="side-desc">OPIS</div>
-        </div>
-
-        <div id="footer">
-            <img src="logo.png" alt="Logo">
-            <p>„Przedsięwzięcie sfinansowane przez Unię Europejską NextGenerationEU w ramach programu Krajowego Planu Odbudowy”</p>
+<!-- WARSTWA STARTOWA -->
+<div id="start-overlay">
+    <div class="info-box">
+        <div id="close-btn">&times;</div>
+        <h1 id="modal-title">Monochord Immersyjny</h1>
+        <p id="modal-desc">„Monochord Immersyjny” to innowacyjna, modułowa kabina łącząca funkcję profesjonalnego studia 3D (Dolby Atmos/Dante) z wirtualnym instrumentem. Dzięki kamerom głębi i systemom trackingu, swobodny ruch ciała artysty generuje i pozycjonuje dźwięk w przestrzeni. Projekt zrealizowano w ramach stypendium KPO.</p>
+        <div class="lang-btns">
+            <button class="lang-btn active" id="btn-pl">Polski</button>
+            <button class="lang-btn" id="btn-en">English</button>
         </div>
     </div>
+</div>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+<div id="gui">
+<div id="reset-btn"><span id="t-reset">RESET</span></div>
 
-        let aCtx;
-        const initA = () => { if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)(); };
-        const playT = (f, t, d, v) => {
-            if (!aCtx) return;
-            const o = aCtx.createOscillator(); const g = aCtx.createGain();
-            o.type = t; o.frequency.setValueAtTime(f, aCtx.currentTime);
-            g.gain.setValueAtTime(v, aCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + d);
-            o.connect(g); g.connect(aCtx.destination); o.start(); o.stop(aCtx.currentTime + d);
-        };
-        const playN = (d, v, f) => {
-            if (!aCtx) return;
-            const b = aCtx.createBuffer(1, aCtx.sampleRate * d, aCtx.sampleRate);
-            const dt = b.getChannelData(0); for (let i = 0; i < dt.length; i++) dt[i] = Math.random() * 2 - 1;
-            const s = aCtx.createBufferSource(); s.buffer = b;
-            const fl = aCtx.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = f;
-            const g = aCtx.createGain(); g.gain.setValueAtTime(v, aCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + d);
-            s.connect(fl); fl.connect(g); g.connect(aCtx.destination); s.start();
-        };
+<div id="header">
+<img src="mc_logo_kolo.png" alt="Logo Lewe" style="max-height: 45px; pointer-events: none;">
+<h1 id="t-main-title">MONOCHORD<br>IMMERSYJNY</h1>
+</div>
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf4f4f4); 
-        const camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 1, 10000);
-        const startCamPos = new THREE.Vector3(1100, 800, 1100);
-        camera.position.copy(startCamPos);
+<div id="menu">
+<div class="section">
+<div class="sec-title" id="s-arch">Architektura</div>
+<button id="btn-walls"><span id="t-walls">Bryła Kabiny</span> <div class="dot"></div></button>
+<button id="btn-floor" class="active"><span id="t-floor">Podłoga</span> <div class="dot"></div></button>
+<button id="btn-seatview"><span id="t-seatview">Widok z Fotela</span> <div class="dot"></div></button>
+<button id="btn-outview"><span id="t-outview">Widok z Zewnątrz</span> <div class="dot"></div></button>
+</div>
+<div class="section">
+<div class="sec-title" id="s-equip">Wyposażenie</div>
+<button id="btn-rack" class="active"><span id="t-rack">Rack Produkcyjny</span> <div class="dot"></div></button>
+<button id="btn-panels" class="active"><span id="t-panels">Panele Akustyczne</span> <div class="dot"></div></button>
+<button id="btn-diffuser" class="active"><span id="t-diffuser">Dyfuzor QRD</span> <div class="dot"></div></button>
+<button id="btn-trackers" class="active"><span id="t-trackers">OptiTrack (Inside)</span> <div class="dot"></div></button>
+<button id="btn-chair" class="active"><span id="t-chair">Fotel</span> <div class="dot"></div></button>
+<button id="btn-vr" class="active"><span id="t-vr">Gogle VR</span> <div class="dot"></div></button>
+</div>
+<div class="section">
+<div class="sec-title" id="s-zones">Strefy Emisji</div>
+<button class="zone" data-id="zenit"><span id="t-z-zenit">Zenit High</span> <div class="dot"></div></button>
+<button class="zone" data-id="sky"><span id="t-z-sky">Sky Layer</span> <div class="dot"></div></button>
+<button class="zone" data-id="main"><span id="t-z-main">Ear-Level</span> <div class="dot"></div></button>
+<button class="zone" data-id="ground"><span id="t-z-ground">Ground / WFS</span> <div class="dot"></div></button>
+<button class="zone" data-id="nadir"><span id="t-z-nadir">Nadir DBA</span> <div class="dot"></div></button>
+</div>
+<div class="section">
+<div class="sec-title" id="s-sim">Symulacja Audio (Wizualna)</div>
+<button class="sim" id="btn-heli"><span id="t-s-heli">Helikopter Scan</span> <div class="dot"></div></button>
+<button class="sim" id="btn-city"><span id="t-s-city">City Traffic</span> <div class="dot"></div></button>
+<button class="sim" id="btn-chaos"><span id="t-s-chaos">Stress Test</span> <div class="dot"></div></button>
+</div>
+</div>
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha:true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        document.body.appendChild(renderer.domElement);
-        
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 0.8;
-        controls.enableZoom = true; 
+<div id="sidebar">
+<div id="side-title">ELEMENT</div>
+<div id="side-desc">OPIS</div>
+</div>
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-        const dir1 = new THREE.DirectionalLight(0xffffff, 0.7); dir1.position.set(500,1000,500); scene.add(dir1);
+<div id="footer">
+<img src="logo.png" alt="Logo">
+<p id="t-footer">„Przedsięwzięcie sfinansowane przez Unię Europejską NextGenerationEU w ramach programu Krajowego Planu Odbudowy”</p>
+</div>
+</div>
 
-        const specs = {
-            zenit: { name: "Genelec 8341A SAM™", desc: "Top Channel (Zenit).\nPasmo: 38 Hz - 37 kHz.\nTechnologia Coaxial Point Source.\nPrecyzyjna lokalizacja w osi pionowej.", freq: 880 },
-            sky: { name: "Genelec 8331A SAM™", desc: "Warstwa Sky Layer (Height Channel).\nPasmo: 45 Hz - 37 kHz.\nNajbardziej kompaktowy monitor trójdrożny The Ones™.\nZastosowanie: Atmos / Auro-3D.", freq: 660 },
-            main: { name: "Genelec 8351B SAM™", desc: "Ear-Level (Main Ring).\nPasmo: 32 Hz - 43 kHz.\nReferencyjny monitor koaksjalny o wysokiej dynamice.\nOptymalizacja GLM™ dla Sweet Spot.", freq: 440 },
-            ground: { name: "Genelec 8320A SAM™", desc: "Warstwa Ground / WFS.\nPasmo: 55 Hz - 23 kHz.\nMonitor pola bliskiego sterowany DSP.\nZastosowanie: Wave Field Synthesis i efekty dolne.", freq: 220 },
-            nadir: { name: "Genelec 7380A SAM™", desc: "Nadir DBA Subwoofer.\nPasmo: 16 Hz - 100 Hz.\nPrzetwornik 15 cali, wzmacniacz 800W.\nKontrola modów Double Bass Array.", freq: 60 }
-        };
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
-        let wallMesh;
-        const objText = `v -170 -260 86.1522\nv -300 -130 140\nv -430 0 86.1522\nv -430 0 0\nv -430 0 -86.1522\nv -300 -130 -140\nv -170 -260 -86.1522\nf 1 2 3 4 5 6 7\nv 170 -260 86.1522\nv 300 -130 140\nv 170 0 193.848\nv -170 0 193.848\nf 8 9 10 11 2 1\nv 430 0 86.1522\nv 430 0 0\nv 430 0 -86.1522\nv 300 -130 -140\nv 170 -260 -86.1522\nf 8 9 12 13 14 15 16\nv 300 130 140\nf 12 9 10 17\nv -300 130 140\nv -170 260 86.1522\nv 170 260 86.1522\nf 11 18 19 20 17 10\nf 11 18 3 2\nv -170 260 -86.1522\nv -300 130 -140\nf 3 18 19 21 22 5 4\nv 170 260 -86.1522\nf 23 21 19 20\nv 300 130 -140\nv 170 0 -193.848\nv -170 0 -193.848\nf 23 24 25 26 22 21\nf 12 17 20 23 24 14 13\nf 14 24 25 15\nf 7 6 26 25 15 16\nf 5 22 26 6\nf 16 7 1 8`;
-        const loader = new OBJLoader();
-        loader.load(URL.createObjectURL(new Blob([objText], {type:'text/plain'})), (obj) => {
-            obj.traverse(child => {
-                if(child.isMesh) {
-                    child.geometry.rotateX(-Math.PI/2); child.geometry.rotateY(Math.PI/2);
-                    child.material = new THREE.MeshStandardMaterial({ color: 0x999999, metalness: 0.1, roughness: 0.8, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
-                    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(child.geometry), new THREE.LineBasicMaterial({color:0x000000}));
-                    scene.add(edges); 
-                    wallMesh = child; wallMesh.visible = false; 
-                    wallMesh.userData.ignore = true;
-                }
-            });
-            scene.add(obj);
-        });
+// ==========================================
+// BAZA TŁUMACZEŃ (PL / EN)
+// ==========================================
+const i18n = {
+    pl: {
+        modalTitle: "Monochord Immersyjny",
+        modalDesc: "„Monochord Immersyjny” to innowacyjna, modułowa kabina łącząca funkcję profesjonalnego studia 3D (Dolby Atmos/Dante) z wirtualnym instrumentem. Dzięki kamerom głębi i systemom trackingu, swobodny ruch ciała artysty generuje i pozycjonuje dźwięk w przestrzeni. Projekt zrealizowano w ramach stypendium KPO.",
+        mainTitle: "MONOCHORD<br>IMMERSYJNY",
+        reset: "RESET",
+        footer: "„Przedsięwzięcie sfinansowane przez Unię Europejską NextGenerationEU w ramach programu Krajowego Planu Odbudowy”",
+        // Menu Sections
+        sArch: "Architektura", sEquip: "Wyposażenie", sZones: "Strefy Emisji", sSim: "Symulacja Audio (Wizualna)",
+        // Menu Buttons
+        btnWalls: "Bryła Kabiny", btnFloor: "Podłoga", btnSeat: "Widok z Fotela", btnOut: "Widok z Zewnątrz",
+        btnRack: "Rack Produkcyjny", btnPanels: "Panele Akustyczne", btnDiffuser: "Dyfuzor QRD", btnTrackers: "OptiTrack (Inside)", btnChair: "Fotel", btnVR: "Gogle VR",
+        btnZenit: "Zenit High", btnSky: "Sky Layer", btnMain: "Ear-Level", btnGround: "Ground / WFS", btnNadir: "Nadir DBA",
+        btnHeli: "Helikopter Scan", btnCity: "City Traffic", btnChaos: "Stress Test",
+        // Object Descriptions
+        oGridT: "Podłoga Techniczna", oGridD: "Ażurowa platforma stalowa (Grid).\nNośność: 500 kg/m².\nZapewnia pełną transparentność akustyczną dla subwooferów DBA umieszczonych poniżej.",
+        oRackT: "Rack Produkcyjny (Mastering Grade)", oRackD: "Sercem studia jest zaawansowany system przetwarzania audio:\n\n• SYSTEM CORE: Trinnov Altitude 32 (64-ch, 24bit/192kHz) z technologią 3D Loudspeaker Remapping.\n• INTERFACE: Antelope Galaxy 64 Synergy Core (Dante/HDX/Thunderbolt, 133dB DNR).\n• PREAMPS A: Millennia HV-3D-8 (Transformerless Class-A, dla nagrań klasycznych).\n• PREAMPS B: Rupert Neve Designs 5024 (Custom Transformers, z kontrolą Silk Texture).\n• CLOCK: Antelope 10M Atomic Clock (Rubidium, 0.03 ppb).\n• POWER: Furman IT-Reference 16Ei (Discrete Symmetrical Power).",
+        oDiffT: "Dyfuzor QRD 2D", oDiffD: "Vicoustic Multifuser DC3.\nTyp: Dwuwymiarowy dyfuzor typu Quadratic Residue.\nZakres działania: 470 Hz – 10 kHz.\nFunkcja: Rozpraszanie fazowe fal, eliminacja echa trzepoczącego (flutter echo) przy zachowaniu żywotności akustycznej pomieszczenia.",
+        oAbsT: "Absorber Boczny", oAbsD: "Absorber szerokopasmowy Heavy Duty.\nGęstość rdzenia: 80 kg/m³ (Wełna mineralna skalna).\nKlasa absorpcji: A (NRC 1.10).\nOgnioodporność: Euroclass A1.\nZastosowanie: Kontrola czasu pogłosu (RT60) w zakresie niskiego środka (125-500Hz).",
+        oChairT: "Fotel Ergonomiczny", oChairD: "Model: Ergohuman Plus Elite (Mesh).\n• Materiał: Oddychająca siatka (Mesh) minimalizująca odbicia akustyczne.\n• Regulacja: 5D (Zagłówek, Lędźwia, Podłokietniki, Kąt, Wysokość).\n• Baza: Polerowane aluminium, kółka ciche do podłóg twardych.",
+        oVRT: "System VR / XR", oVRD: "• Gogle: Varjo XR-4 Focal Edition.\n• Rozdzielczość: 51 PPD (Retina resolution), 4K na oko.\n• Passthrough: Kamery 20 Mpx (Mixed Reality).\n• Eye Tracking: 200 Hz z foveated rendering.\n• Kontrolery: Manus Prime X Haptic Gloves (Fizyczny feedback).",
+        oMocapT: "Kamera OptiTrack PrimeX 13", oMocapD: "• Typ: Wysokoobrotowa kamera Motion Capture.\n• Rozdzielczość: 1.3 MP (do 240 FPS).\n• Latencja: Systemowa < 4.2ms.\n• Zastosowanie: Precyzyjne śledzenie 6DoF instrumentów i ciała w przestrzeni VR/XR.",
+        zZenitT: "Top Channel (Zenit)", zZenitD: "Pasmo: 38 Hz - 37 kHz.\nTechnologia Coaxial Point Source.\nPrecyzyjna lokalizacja w osi pionowej.",
+        zSkyT: "Warstwa Sky Layer (Height Channel)", zSkyD: "Pasmo: 45 Hz - 37 kHz.\nNajbardziej kompaktowy monitor trójdrożny The Ones™.\nZastosowanie: Atmos / Auro-3D.",
+        zMainT: "Ear-Level (Main Ring)", zMainD: "Pasmo: 32 Hz - 43 kHz.\nReferencyjny monitor koaksjalny o wysokiej dynamice.\nOptymalizacja GLM™ dla Sweet Spot.",
+        zGroundT: "Warstwa Ground / WFS", zGroundD: "Pasmo: 55 Hz - 23 kHz.\nMonitor pola bliskiego sterowany DSP.\nZastosowanie: Wave Field Synthesis i efekty dolne.",
+        zNadirT: "Nadir DBA Subwoofer", zNadirD: "Pasmo: 16 Hz - 100 Hz.\nPrzetwornik 15 cali, wzmacniacz 800W.\nKontrola modów Double Bass Array."
+    },
+    en: {
+        modalTitle: "Immersive Monochord",
+        modalDesc: "The 'Immersive Monochord' is an innovative, modular cabin combining the function of a professional 3D studio (Dolby Atmos/Dante) with a virtual instrument. Thanks to depth cameras and tracking systems, the free movement of the artist's body generates and positions sound in space. The project was realized as part of the KPO scholarship.",
+        mainTitle: "IMMERSIVE<br>MONOCHORD",
+        reset: "RESET",
+        footer: "The project is funded by the European Union NextGenerationEU under the National Recovery Plan.",
+        // Menu Sections
+        sArch: "Architecture", sEquip: "Equipment", sZones: "Emission Zones", sSim: "Audio Simulation (Visual)",
+        // Menu Buttons
+        btnWalls: "Cabin Shell", btnFloor: "Floor", btnSeat: "Seat View", btnOut: "Outside View",
+        btnRack: "Production Rack", btnPanels: "Acoustic Panels", btnDiffuser: "QRD Diffuser", btnTrackers: "OptiTrack (Inside)", btnChair: "Chair", btnVR: "VR Headset",
+        btnZenit: "Zenith High", btnSky: "Sky Layer", btnMain: "Ear-Level", btnGround: "Ground / WFS", btnNadir: "Nadir DBA",
+        btnHeli: "Helicopter Scan", btnCity: "City Traffic", btnChaos: "Stress Test",
+        // Object Descriptions
+        oGridT: "Technical Floor", oGridD: "Openwork steel platform.\nLoad capacity: 500 kg/m².\nEnsures full acoustic transparency for low frequencies from the DBA subwoofers located below.",
+        oRackT: "Production Rack (Mastering Grade)", oRackD: "The heart of the studio is an advanced audio processing system:\n\n• SYSTEM CORE: Trinnov Altitude 32 (64-ch, 24bit/192kHz) with 3D Loudspeaker Remapping technology.\n• INTERFACE: Antelope Galaxy 64 Synergy Core (Dante/HDX/Thunderbolt, 133dB DNR).\n• PREAMPS A: Millennia HV-3D-8 (Transformerless Class-A, for classical recordings).\n• PREAMPS B: Rupert Neve Designs 5024 (Custom Transformers, with Silk Texture control).\n• CLOCK: Antelope 10M Atomic Clock (Rubidium, 0.03 ppb).\n• POWER: Furman IT-Reference 16Ei (Discrete Symmetrical Power).",
+        oDiffT: "QRD 2D Diffuser", oDiffD: "Vicoustic Multifuser DC3.\nType: Two-dimensional Quadratic Residue diffuser.\nOperating range: 470 Hz – 10 kHz.\nFunction: Phase wave scattering, elimination of flutter echo while preserving the acoustic vitality of the room.",
+        oAbsT: "Side Absorber", oAbsD: "Heavy Duty broadband absorber.\nCore density: 80 kg/m³ (Rock mineral wool).\nAbsorption class: A (NRC 1.10).\nFire resistance: Euroclass A1.\nApplication: Reverb time control (RT60) in the low-mid frequency range (125-500Hz).",
+        oChairT: "Ergonomic Chair", oChairD: "Model: Ergohuman Plus Elite (Mesh).\n• Material: Breathable mesh minimizing acoustic reflections right next to the ears.\n• Adjustment: 5D (Headrest, Lumbar, Armrests, Angle, Height).\n• Base: Polished aluminum, quiet casters for hard floors.",
+        oVRT: "VR / XR System", oVRD: "• Headset: Varjo XR-4 Focal Edition.\n• Resolution: 51 PPD (Retina resolution), 4K per eye.\n• Passthrough: 20 Mpx cameras (Mixed Reality).\n• Eye Tracking: 200 Hz with foveated rendering.\n• Controllers: Manus Prime X Haptic Gloves (Physical feedback).",
+        oMocapT: "OptiTrack PrimeX 13 Camera", oMocapD: "• Type: High-speed Motion Capture camera.\n• Resolution: 1.3 MP (up to 240 FPS).\n• Latency: System < 4.2ms.\n• Application: Precise 6DoF tracking of instruments and body in VR/XR space.",
+        zZenitT: "Top Channel (Zenith)", zZenitD: "Frequency response: 38 Hz - 37 kHz.\nCoaxial Point Source technology.\nPrecise vertical axis localization.",
+        zSkyT: "Sky Layer (Height Channel)", zSkyD: "Frequency response: 45 Hz - 37 kHz.\nThe most compact The Ones™ three-way monitor.\nApplication: Atmos / Auro-3D.",
+        zMainT: "Ear-Level (Main Ring)", zMainD: "Frequency response: 32 Hz - 43 kHz.\nHigh-dynamic reference coaxial monitor.\nGLM™ optimization for the Sweet Spot.",
+        zGroundT: "Ground Layer / WFS", zGroundD: "Frequency response: 55 Hz - 23 kHz.\nDSP-controlled nearfield monitor.\nApplication: Wave Field Synthesis and lower effects.",
+        zNadirT: "Nadir DBA Subwoofer", zNadirD: "Frequency response: 16 Hz - 100 Hz.\n15-inch driver, 800W amplifier.\nDouble Bass Array modal control."
+    }
+};
 
-        const h = 15; 
-        const lowH = h + 37;
-        const interactive = []; const panels = [];
+let currentLang = 'pl';
+let hasStarted = false; // Zapobiega interakcji, gdy modal jest otwarty
 
-        const grid = new THREE.Group();
-        const gridM = new THREE.MeshStandardMaterial({color: 0x666666});
-        for(let i=-100; i<=100; i+=10) { const b=new THREE.Mesh(new THREE.BoxGeometry(1.2,5,400),gridM); b.position.x=i; grid.add(b); }
-        for(let j=-200; j<=200; j+=10) { const b=new THREE.Mesh(new THREE.BoxGeometry(200,5,1.2),gridM); b.position.z=j; grid.add(b); }
-        grid.position.y = -123 + h; grid.userData = { title: "Podłoga Techniczna", desc: "Ażurowa platforma stalowa (Grid).\nNośność: 500 kg/m².\nZapewnia pełną transparentność akustyczną dla subwooferów DBA umieszczonych poniżej." };
-        scene.add(grid); interactive.push(grid);
+// ==========================================
+// AUDIO SYSTEM
+// ==========================================
+let aCtx;
+const initA = () => { if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)(); };
+const playT = (f, t, d, v) => {
+if (!aCtx) return;
+const o = aCtx.createOscillator(); const g = aCtx.createGain();
+o.type = t; o.frequency.setValueAtTime(f, aCtx.currentTime);
+g.gain.setValueAtTime(v, aCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + d);
+o.connect(g); g.connect(aCtx.destination); o.start(); o.stop(aCtx.currentTime + d);
+};
+const playN = (d, v, f) => {
+if (!aCtx) return;
+const b = aCtx.createBuffer(1, aCtx.sampleRate * d, aCtx.sampleRate);
+const dt = b.getChannelData(0); for (let i = 0; i < dt.length; i++) dt[i] = Math.random() * 2 - 1;
+const s = aCtx.createBufferSource(); s.buffer = b;
+const fl = aCtx.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = f;
+const g = aCtx.createGain(); g.gain.setValueAtTime(v, aCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + d);
+s.connect(fl); fl.connect(g); g.connect(aCtx.destination); s.start();
+};
 
-        const rack = new THREE.Mesh(new THREE.BoxGeometry(40,100,40), new THREE.MeshStandardMaterial({color:0x222222}));
-        rack.position.set(0, -70 + h, 350); 
-        rack.userData = { 
-            title: "Rack Produkcyjny (Mastering Grade)", 
-            desc: "Sercem studia jest zaawansowany system przetwarzania audio:\n\n• SYSTEM CORE: Trinnov Altitude 32 (64-ch, 24bit/192kHz) z technologią 3D Loudspeaker Remapping.\n• INTERFACE: Antelope Galaxy 64 Synergy Core (Dante/HDX/Thunderbolt, 133dB DNR).\n• PREAMPS A: Millennia HV-3D-8 (Transformerless Class-A, dla nagrań klasycznych).\n• PREAMPS B: Rupert Neve Designs 5024 (Custom Transformers, z kontrolą Silk Texture).\n• CLOCK: Antelope 10M Atomic Clock (Rubidium, 0.03 ppb).\n• POWER: Furman IT-Reference 16Ei (Discrete Symmetrical Power)." 
-        };
-        scene.add(rack); interactive.push(rack);
+// ==========================================
+// 3D SCENE SETUP
+// ==========================================
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf4f4f4); 
+const camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 1, 10000);
+const startCamPos = new THREE.Vector3(1100, 800, 1100);
+camera.position.copy(startCamPos);
 
-        const diffuser = new THREE.Mesh(new THREE.BoxGeometry(70,70,15), new THREE.MeshStandardMaterial({color:0x444444}));
-        diffuser.position.set(0, 0+h, -350); 
-        diffuser.userData = { 
-            title: "Dyfuzor QRD 2D", 
-            desc: "Vicoustic Multifuser DC3.\nTyp: Dwuwymiarowy dyfuzor typu Quadratic Residue.\nZakres działania: 470 Hz – 10 kHz.\nFunkcja: Rozpraszanie fazowe fal, eliminacja echa trzepoczącego (flutter echo) przy zachowaniu żywotności akustycznej pomieszczenia." 
-        };
-        scene.add(diffuser); interactive.push(diffuser);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha:true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+document.body.appendChild(renderer.domElement);
 
-        const mkP = (x,z,t) => {
-            const p = new THREE.Mesh(new THREE.BoxGeometry(5,130,140), new THREE.MeshStandardMaterial({color:0x555555}));
-            p.position.set(x, 0+h, z); 
-            p.userData = { 
-                title: t, 
-                desc: "Absorber szerokopasmowy Heavy Duty.\nGęstość rdzenia: 80 kg/m³ (Wełna mineralna skalna).\nKlasa absorpcji: A (NRC 1.10).\nOgnioodporność: Euroclass A1.\nZastosowanie: Kontrola czasu pogłosu (RT60) w zakresie niskiego środka (125-500Hz)." 
-            };
-            scene.add(p); interactive.push(p); panels.push(p);
-        };
-        mkP(-240, 0, "Absorber Boczny L"); mkP(240, 0, "Absorber Boczny P");
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 0.8;
+controls.enableZoom = true; 
 
-        const chair = new THREE.Group();
-        chair.add(new THREE.Mesh(new THREE.BoxGeometry(40,10,40), new THREE.MeshStandardMaterial({color:0x111111})));
-        chair.position.y = -50+h;
-        chair.userData = { 
-            title: "Fotel Ergonomiczny", 
-            desc: "Model: Ergohuman Plus Elite (Mesh).\n• Materiał: Oddychająca siatka (Mesh) minimalizująca odbicia akustyczne.\n• Regulacja: 5D (Zagłówek, Lędźwia, Podłokietniki, Kąt, Wysokość).\n• Baza: Polerowane aluminium, kółka ciche do podłóg twardych." 
-        };
-        scene.add(chair); interactive.push(chair);
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+const dir1 = new THREE.DirectionalLight(0xffffff, 0.7); dir1.position.set(500,1000,500); scene.add(dir1);
 
-        const headGroup = new THREE.Group();
-        chair.add(headGroup);
-        const dummy = new THREE.Mesh(new THREE.SphereGeometry(12,32,32), new THREE.MeshStandardMaterial({color:0xffff00}));
-        dummy.position.y = 40; headGroup.add(dummy); 
-        const eyeGeo = new THREE.SphereGeometry(1.5, 16, 16); const eyeMat = new THREE.MeshBasicMaterial({color:0x000000});
-        const eyeL = new THREE.Mesh(eyeGeo, eyeMat); eyeL.position.set(-4, 42, 10);
-        const eyeR = new THREE.Mesh(eyeGeo, eyeMat); eyeR.position.set(4, 42, 10);
-        headGroup.add(eyeL, eyeR);
-        const smileGeo = new THREE.TorusGeometry(3, 0.5, 16, 16, Math.PI); 
-        const smile = new THREE.Mesh(smileGeo, new THREE.MeshBasicMaterial({color:0x000000}));
-        smile.position.set(0, 36, 10.5); smile.rotation.z = Math.PI; headGroup.add(smile);
-        
-        const vrGroup = new THREE.Group();
-        const vrMat = new THREE.MeshStandardMaterial({color:0xcc4400, roughness: 0.7, metalness: 0.1});
-        const housing = new THREE.Mesh(new THREE.BoxGeometry(16, 8, 10), vrMat);
-        const facePlate = new THREE.Mesh(new THREE.BoxGeometry(16.5, 7, 1), new THREE.MeshStandardMaterial({color:0xaa3300})); facePlate.position.z = 5.2;
-        const strap = new THREE.Mesh(new THREE.TorusGeometry(8, 0.6, 8, 24), new THREE.MeshBasicMaterial({color:0x111111})); strap.rotation.x = Math.PI/2;
-        vrGroup.add(housing, facePlate, strap);
-        vrGroup.position.set(0, 40, 10); headGroup.add(vrGroup);
-        
-        housing.userData = { 
-            title: "System VR / XR", 
-            desc: "• Gogle: Varjo XR-4 Focal Edition.\n• Rozdzielczość: 51 PPD (Retina resolution), 4K na oko.\n• Passthrough: Kamery 20 Mpx (Mixed Reality).\n• Eye Tracking: 200 Hz z foveated rendering.\n• Kontrolery: Manus Prime X Haptic Gloves (Fizyczny feedback)." 
-        };
-        interactive.push(housing);
+const specs = {
+zenit: { name: "Genelec 8341A SAM™", freq: 880 },
+sky: { name: "Genelec 8331A SAM™", freq: 660 },
+main: { name: "Genelec 8351B SAM™", freq: 440 },
+ground: { name: "Genelec 8320A SAM™", freq: 220 },
+nadir: { name: "Genelec 7380A SAM™", freq: 60 }
+};
 
-        const trackers = new THREE.Group();
-        const trkGeo = new THREE.BoxGeometry(10,10,10); 
-        const trkMat = new THREE.MeshStandardMaterial({color:0xcc4400, roughness: 0.7});
-        const lensGeo = new THREE.CircleGeometry(3.5, 32); 
-        const lensMat = new THREE.MeshBasicMaterial({color:0x000000});
-        function mkTrk(x,y,z) { 
-            const tGroup = new THREE.Group();
-            tGroup.position.set(x,y,z); tGroup.lookAt(0,0,0);
-            const body = new THREE.Mesh(trkGeo, trkMat);
-            const lens = new THREE.Mesh(lensGeo, lensMat); lens.position.z = 5.1;
-            tGroup.add(body, lens);
-            body.userData = { 
-                title: "Kamera OptiTrack PrimeX 13", 
-                desc: "• Typ: Wysokoobrotowa kamera Motion Capture.\n• Rozdzielczość: 1.3 MP (do 240 FPS).\n• Latencja: Systemowa < 4.2ms.\n• Zastosowanie: Precyzyjne śledzenie 6DoF instrumentów i ciała w przestrzeni VR/XR." 
-            }; 
-            interactive.push(body); trackers.add(tGroup);
-        }
-        mkTrk(-190, 80, -190); mkTrk(190, 80, -190); mkTrk(-190, 80, 190); mkTrk(190, 80, 190);
-        scene.add(trackers);
+let wallMesh;
+const objText = `v -170 -260 86.1522\nv -300 -130 140\nv -430 0 86.1522\nv -430 0 0\nv -430 0 -86.1522\nv -300 -130 -140\nv -170 -260 -86.1522\nf 1 2 3 4 5 6 7\nv 170 -260 86.1522\nv 300 -130 140\nv 170 0 193.848\nv -170 0 193.848\nf 8 9 10 11 2 1\nv 430 0 86.1522\nv 430 0 0\nv 430 0 -86.1522\nv 300 -130 -140\nv 170 -260 -86.1522\nf 8 9 12 13 14 15 16\nv 300 130 140\nf 12 9 10 17\nv -300 130 140\nv -170 260 86.1522\nv 170 260 86.1522\nf 11 18 19 20 17 10\nf 11 18 3 2\nv -170 260 -86.1522\nv -300 130 -140\nf 3 18 19 21 22 5 4\nv 170 260 -86.1522\nf 23 21 19 20\nv 300 130 -140\nv 170 0 -193.848\nv -170 0 -193.848\nf 23 24 25 26 22 21\nf 12 17 20 23 24 14 13\nf 14 24 25 15\nf 7 6 26 25 15 16\nf 5 22 26 6\nf 16 7 1 8`;
+const loader = new OBJLoader();
+loader.load(URL.createObjectURL(new Blob([objText], {type:'text/plain'})), (obj) => {
+obj.traverse(child => {
+if(child.isMesh) {
+child.geometry.rotateX(-Math.PI/2); child.geometry.rotateY(Math.PI/2);
+child.material = new THREE.MeshStandardMaterial({ color: 0x999999, metalness: 0.1, roughness: 0.8, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+const edges = new THREE.LineSegments(new THREE.EdgesGeometry(child.geometry), new THREE.LineBasicMaterial({color:0x000000}));
+scene.add(edges); 
+wallMesh = child; wallMesh.visible = false; 
+wallMesh.userData.ignore = true;
+}
+});
+scene.add(obj);
+});
 
-        const speakers = []; const groups = { zenit:[], sky:[], main:[], ground:[], nadir:[] };
-        const loops = { zenit:false, sky:false, main:false, ground:false, nadir:false };
-        function mkSpk(x,y,z,color,id,label, isLow = false) {
-            const g = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(16,22,16), new THREE.MeshStandardMaterial({color:0x999999}));
-            const cone = new THREE.Mesh(new THREE.CircleGeometry(7,32), new THREE.MeshBasicMaterial({color:0x222222})); cone.position.z=8.1; g.add(body, cone); 
-            const curY = isLow ? y + lowH : y + h;
-            g.position.set(x, curY, z); g.lookAt(0, h, 0);
-            const sp = specs[id];
-            const info = { title: label + ": " + sp.name, desc: sp.desc };
-            g.userData = info; body.userData = info; cone.userData = info;
-            scene.add(g); interactive.push(g, body, cone);
-            const ds = {mesh:cone, pos:new THREE.Vector3(x, curY, z), group:id, cd:0, color: new THREE.Color(color)};
-            speakers.push(ds); groups[id].push(ds);
-        }
-        mkSpk(0, 160, 0, 0xff8800, 'zenit', "Monitor");
-        for(let i=0; i<8; i++){ let a=i/8*Math.PI*2+Math.PI/8; mkSpk(Math.sin(a)*140, 110, Math.cos(a)*140, 0xffaa00, 'sky', "Sky Monitor"); }
-        for(let i=0; i<12; i++){ let a=i/12*Math.PI*2; mkSpk(Math.sin(a)*220, 0, Math.cos(a)*280, 0x00cc44, 'main', "Main Monitor"); }
-        for(let i=0; i<8; i++){ let a=i/8*Math.PI*2; mkSpk(Math.sin(a)*130, -180, Math.cos(a)*160, 0x0066ff, 'ground', "Ground Monitor", true); }
-        mkSpk(0,-200,-100, 0xcc00ff, 'nadir', "Sub DBA Front", true); mkSpk(0,-200,100, 0xcc00ff, 'nadir', "Sub DBA Rear", true);
+const h = 15; 
+const lowH = h + 37;
+const interactive = []; const panels = []; const trackerBodies = [];
 
-        const waves = []; const headPos = new THREE.Vector3(0, h, 0);
-        function fire(s) {
-            if(s.cd > 0) return; s.cd = 6; 
-            if(aCtx) { const sp = specs[s.group]; playT(sp.freq, 'sine', 0.1, 0.05); } 
-            const m = new THREE.Mesh(new THREE.TorusGeometry(2, 0.4, 16, 40), new THREE.MeshBasicMaterial({ color: s.color, transparent: true, opacity: 0.7 }));
-            m.position.copy(s.pos); m.lookAt(headPos); scene.add(m);
-            waves.push({ m:m, start:s.pos.clone(), p:0, spd: 0.012 });
-        }
+const grid = new THREE.Group();
+const gridM = new THREE.MeshStandardMaterial({color: 0x666666});
+for(let i=-100; i<=100; i+=10) { const b=new THREE.Mesh(new THREE.BoxGeometry(1.2,5,400),gridM); b.position.x=i; grid.add(b); }
+for(let j=-200; j<=200; j+=10) { const b=new THREE.Mesh(new THREE.BoxGeometry(200,5,1.2),gridM); b.position.z=j; grid.add(b); }
+grid.position.y = -123 + h; 
+scene.add(grid); interactive.push(grid);
 
-        // UKRYTO MYSZKĘ POZA EKRAN NA START
-        const ray = new THREE.Raycaster(); const mouse = new THREE.Vector2(-1000, -1000);
-        const side = document.getElementById('sidebar'), sT = document.getElementById('side-title'), sD = document.getElementById('side-desc');
-        let pinnedObject = null; let isHovering = false;
+const rack = new THREE.Mesh(new THREE.BoxGeometry(40,100,40), new THREE.MeshStandardMaterial({color:0x222222}));
+rack.position.set(0, -70 + h, 350); 
+scene.add(rack); interactive.push(rack);
 
-        window.addEventListener('mousemove', (e) => { 
-            mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1; 
-        });
+const diffuser = new THREE.Mesh(new THREE.BoxGeometry(70,70,15), new THREE.MeshStandardMaterial({color:0x444444}));
+diffuser.position.set(0, 0+h, -350); 
+scene.add(diffuser); interactive.push(diffuser);
 
-        window.addEventListener('mousedown', () => {
-            if(seatView || (wallMesh && wallMesh.visible)) return;
-            ray.setFromCamera(mouse, camera);
-            const hits = ray.intersectObjects(interactive, true);
-            let validHit = null;
-            for(let i = 0; i < hits.length; i++) {
-                let t = hits[i].object;
-                let vis = true, p = t;
-                while(p) { if(p.visible===false) { vis=false; break; } p = p.parent; }
-                if(!vis) continue;
+const mkP = (x,z,sideId) => {
+const p = new THREE.Mesh(new THREE.BoxGeometry(5,130,140), new THREE.MeshStandardMaterial({color:0x555555}));
+p.position.set(x, 0+h, z); 
+scene.add(p); interactive.push(p); panels.push({mesh: p, sideId: sideId});
+};
+mkP(-240, 0, "L"); mkP(240, 0, "R"); // Używamy L/R by dynamicznie przypisywać nazwy
 
-                p = t;
-                while(p && !p.userData.title) p = p.parent;
-                if(p && p.userData.title) { validHit = p; break; }
-            }
-            if(validHit) {
-                pinnedObject = validHit; side.style.display='block';
-                sT.innerText=validHit.userData.title; sD.innerText=validHit.userData.desc;
-            } else { pinnedObject = null; side.style.display='none'; }
-        });
+const chair = new THREE.Group();
+chair.add(new THREE.Mesh(new THREE.BoxGeometry(40,10,40), new THREE.MeshStandardMaterial({color:0x111111})));
+chair.position.y = -50+h;
+scene.add(chair); interactive.push(chair);
 
-        function stopZones() {
-            Object.keys(loops).forEach(k => loops[k] = false);
-            document.querySelectorAll('.zone').forEach(b => b.classList.remove('looping'));
-        }
+const headGroup = new THREE.Group();
+chair.add(headGroup);
+const dummy = new THREE.Mesh(new THREE.SphereGeometry(12,32,32), new THREE.MeshStandardMaterial({color:0xffff00}));
+dummy.position.y = 40; headGroup.add(dummy); 
+const eyeGeo = new THREE.SphereGeometry(1.5, 16, 16); const eyeMat = new THREE.MeshBasicMaterial({color:0x000000});
+const eyeL = new THREE.Mesh(eyeGeo, eyeMat); eyeL.position.set(-4, 42, 10);
+const eyeR = new THREE.Mesh(eyeGeo, eyeMat); eyeR.position.set(4, 42, 10);
+headGroup.add(eyeL, eyeR);
+const smileGeo = new THREE.TorusGeometry(3, 0.5, 16, 16, Math.PI); 
+const smile = new THREE.Mesh(smileGeo, new THREE.MeshBasicMaterial({color:0x000000}));
+smile.position.set(0, 36, 10.5); smile.rotation.z = Math.PI; headGroup.add(smile);
 
-        document.querySelectorAll('.zone').forEach(b => { 
-            b.onclick = () => { initA(); const id=b.getAttribute('data-id'); loops[id]=!loops[id]; b.classList.toggle('looping'); }; 
-        });
+const vrGroup = new THREE.Group();
+const vrMat = new THREE.MeshStandardMaterial({color:0xcc4400, roughness: 0.7, metalness: 0.1});
+const housing = new THREE.Mesh(new THREE.BoxGeometry(16, 8, 10), vrMat);
+const facePlate = new THREE.Mesh(new THREE.BoxGeometry(16.5, 7, 1), new THREE.MeshStandardMaterial({color:0xaa3300})); facePlate.position.z = 5.2;
+const strap = new THREE.Mesh(new THREE.TorusGeometry(8, 0.6, 8, 24), new THREE.MeshBasicMaterial({color:0x111111})); strap.rotation.x = Math.PI/2;
+vrGroup.add(housing, facePlate, strap);
+vrGroup.position.set(0, 40, 10); headGroup.add(vrGroup);
+interactive.push(housing);
 
-        let mode=null, prog=0;
-        document.getElementById('btn-heli').onclick = function() { initA(); stopZones(); mode=mode==='heli'?null:'heli'; this.classList.toggle('active'); document.getElementById('btn-chaos').classList.remove('active'); document.getElementById('btn-city').classList.remove('active'); };
-        document.getElementById('btn-chaos').onclick = function() { initA(); stopZones(); mode=mode==='chaos'?null:'chaos'; this.classList.toggle('active'); document.getElementById('btn-heli').classList.remove('active'); document.getElementById('btn-city').classList.remove('active'); };
-        document.getElementById('btn-city').onclick = function() { initA(); stopZones(); mode=mode==='city'?null:'city'; this.classList.toggle('active'); document.getElementById('btn-heli').classList.remove('active'); document.getElementById('btn-chaos').classList.remove('active'); };
+const trackers = new THREE.Group();
+const trkGeo = new THREE.BoxGeometry(10,10,10); 
+const trkMat = new THREE.MeshStandardMaterial({color:0xcc4400, roughness: 0.7});
+const lensGeo = new THREE.CircleGeometry(3.5, 32); 
+const lensMat = new THREE.MeshBasicMaterial({color:0x000000});
+function mkTrk(x,y,z) { 
+const tGroup = new THREE.Group();
+tGroup.position.set(x,y,z); tGroup.lookAt(0,0,0);
+const body = new THREE.Mesh(trkGeo, trkMat);
+const lens = new THREE.Mesh(lensGeo, lensMat); lens.position.z = 5.1;
+tGroup.add(body, lens);
+interactive.push(body); trackerBodies.push(body); trackers.add(tGroup);
+}
+mkTrk(-190, 80, -190); mkTrk(190, 80, -190); mkTrk(-190, 80, 190); mkTrk(190, 80, 190);
+scene.add(trackers);
 
-        document.getElementById('btn-walls').onclick = function() { wallMesh.visible=!wallMesh.visible; this.classList.toggle('active'); if(wallMesh.visible) { side.style.display='none'; pinnedObject=null; } };
-        document.getElementById('btn-floor').onclick = function() { grid.visible=!grid.visible; this.classList.toggle('active'); };
-        document.getElementById('btn-rack').onclick = function() { rack.visible=!rack.visible; this.classList.toggle('active'); };
-        document.getElementById('btn-trackers').onclick = function() { trackers.visible=!trackers.visible; this.classList.toggle('active'); };
-        document.getElementById('btn-diffuser').onclick = function() { diffuser.visible=!diffuser.visible; this.classList.toggle('active'); };
-        document.getElementById('btn-panels').onclick = function() { panels.forEach(p=>p.visible=!p.visible); this.classList.toggle('active'); };
-        document.getElementById('btn-chair').onclick = function() { chair.visible=!chair.visible; this.classList.toggle('active'); };
-        
-        let vrEnabled = true;
-        document.getElementById('btn-vr').onclick = function() { vrEnabled = !vrEnabled; vrGroup.visible = vrEnabled; this.classList.toggle('active'); };
+const speakers = []; const groups = { zenit:[], sky:[], main:[], ground:[], nadir:[] };
+const loops = { zenit:false, sky:false, main:false, ground:false, nadir:false };
+function mkSpk(x,y,z,color,id, isLow = false) {
+const g = new THREE.Group();
+const body = new THREE.Mesh(new THREE.BoxGeometry(16,22,16), new THREE.MeshStandardMaterial({color:0x999999}));
+const cone = new THREE.Mesh(new THREE.CircleGeometry(7,32), new THREE.MeshBasicMaterial({color:0x222222})); cone.position.z=8.1; g.add(body, cone); 
+const curY = isLow ? y + lowH : y + h;
+g.position.set(x, curY, z); g.lookAt(0, h, 0);
 
-        let seatView = false;
-        document.getElementById('btn-seatview').onclick = function() {
-            seatView = !seatView; this.classList.toggle('active');
-            document.getElementById('btn-outview').classList.remove('active');
-            if(seatView) { 
-                if(!wallMesh.visible) { wallMesh.visible = true; document.getElementById('btn-walls').classList.add('active'); }
-                camera.fov = 60; camera.updateProjectionMatrix();
-                controls.target.set(0, h, 0); camera.position.set(0, h, 5); 
-                side.style.display='none'; pinnedObject=null;
-            } else { 
-                camera.fov = 35; camera.updateProjectionMatrix(); camera.position.copy(startCamPos); 
-            }
-        };
+scene.add(g); interactive.push(g, body, cone);
+const ds = {g: g, body: body, mesh:cone, pos:new THREE.Vector3(x, curY, z), group:id, cd:0, color: new THREE.Color(color)};
+speakers.push(ds); groups[id].push(ds);
+}
 
-        document.getElementById('btn-outview').onclick = function() {
-            seatView = false; camera.fov = 35; camera.updateProjectionMatrix();
-            document.getElementById('btn-seatview').classList.remove('active');
-            this.classList.toggle('active'); controls.target.set(0,0,0); camera.position.set(2000, 1500, 2000);
-        };
+mkSpk(0, 160, 0, 0xff8800, 'zenit');
+for(let i=0; i<8; i++){ let a=i/8*Math.PI*2+Math.PI/8; mkSpk(Math.sin(a)*140, 110, Math.cos(a)*140, 0xffaa00, 'sky'); }
+for(let i=0; i<12; i++){ let a=i/12*Math.PI*2; mkSpk(Math.sin(a)*220, 0, Math.cos(a)*280, 0x00cc44, 'main'); }
+for(let i=0; i<8; i++){ let a=i/8*Math.PI*2; mkSpk(Math.sin(a)*130, -180, Math.cos(a)*160, 0x0066ff, 'ground', true); }
+mkSpk(0,-200,-100, 0xcc00ff, 'nadir', true); mkSpk(0,-200,100, 0xcc00ff, 'nadir', true);
 
-        document.getElementById('reset-btn').onclick = function() {
-            seatView = false; document.getElementById('btn-seatview').classList.remove('active');
-            document.getElementById('btn-outview').classList.remove('active');
-            camera.fov = 35; camera.updateProjectionMatrix();
-            camera.position.copy(startCamPos); controls.target.set(0,0,0);
-            wallMesh.visible = false; document.getElementById('btn-walls').classList.remove('active');
-            grid.visible = true; document.getElementById('btn-floor').classList.add('active');
-            rack.visible = true; document.getElementById('btn-rack').classList.add('active');
-            panels.forEach(p=>p.visible=true); document.getElementById('btn-panels').classList.add('active');
-            vrEnabled = true; vrGroup.visible = true; document.getElementById('btn-vr').classList.add('active');
-            mode = null; stopZones();
-            document.querySelectorAll('.sim').forEach(b => b.classList.remove('active'));
-            pinnedObject = null; side.style.display='none';
-        };
+// ==========================================
+// FUNKCJE TŁUMACZENIOWE (W locie)
+// ==========================================
+function setLanguage(lang) {
+    currentLang = lang;
+    const t = i18n[lang];
 
-        function animate() {
-            requestAnimationFrame(animate); 
-            
-            // --- SKANOWANIE OBIEKTÓW CO KLATKĘ ---
-            if(seatView || (wallMesh && wallMesh.visible)) {
-                 side.style.display='none';
-                 document.body.style.cursor = 'default';
-                 isHovering = false;
-            } else {
-                ray.setFromCamera(mouse, camera);
-                const hits = ray.intersectObjects(interactive, true);
-                
-                let validHit = null;
-                for(let i = 0; i < hits.length; i++) {
-                    let t = hits[i].object;
-                    let vis = true, p = t;
-                    while(p) { if(p.visible===false) { vis=false; break; } p = p.parent; }
-                    if(!vis) continue;
+    // Modal
+    document.getElementById('modal-title').innerText = t.modalTitle;
+    document.getElementById('modal-desc').innerText = t.modalDesc;
 
-                    p = t;
-                    while(p && !p.userData.title) p = p.parent;
-                    if(p && p.userData.title) { validHit = p; break; }
-                }
+    // UI Menu & Headers
+    document.getElementById('t-main-title').innerHTML = t.mainTitle;
+    document.getElementById('t-reset').innerText = t.reset;
+    document.getElementById('t-footer').innerText = t.footer;
+    
+    document.getElementById('s-arch').innerText = t.sArch;
+    document.getElementById('s-equip').innerText = t.sEquip;
+    document.getElementById('s-zones').innerText = t.sZones;
+    document.getElementById('s-sim').innerText = t.sSim;
 
-                isHovering = (validHit !== null);
+    document.getElementById('t-walls').innerText = t.btnWalls;
+    document.getElementById('t-floor').innerText = t.btnFloor;
+    document.getElementById('t-seatview').innerText = t.btnSeat;
+    document.getElementById('t-outview').innerText = t.btnOut;
+    
+    document.getElementById('t-rack').innerText = t.btnRack;
+    document.getElementById('t-panels').innerText = t.btnPanels;
+    document.getElementById('t-diffuser').innerText = t.btnDiffuser;
+    document.getElementById('t-trackers').innerText = t.btnTrackers;
+    document.getElementById('t-chair').innerText = t.btnChair;
+    document.getElementById('t-vr').innerText = t.btnVR;
 
-                if(!pinnedObject) {
-                    if(validHit) {
-                        document.body.style.cursor = 'pointer';
-                        side.style.display = 'block';
-                        sT.innerText = validHit.userData.title;
-                        sD.innerText = validHit.userData.desc;
-                    } else { 
-                        document.body.style.cursor = 'default'; 
-                        side.style.display = 'none'; 
-                    }
-                } else {
-                    document.body.style.cursor = validHit ? 'pointer' : 'default';
-                }
-            }
+    document.getElementById('t-z-zenit').innerText = t.btnZenit;
+    document.getElementById('t-z-sky').innerText = t.btnSky;
+    document.getElementById('t-z-main').innerText = t.btnMain;
+    document.getElementById('t-z-ground').innerText = t.btnGround;
+    document.getElementById('t-z-nadir').innerText = t.btnNadir;
 
-            // AUTO-OBRÓT ZATRZYMUJE SIĘ PODCZAS HOVERA
-            controls.autoRotate = !pinnedObject && !mode && !seatView && !isHovering;
-            controls.update();
+    document.getElementById('t-s-heli').innerText = t.btnHeli;
+    document.getElementById('t-s-city').innerText = t.btnCity;
+    document.getElementById('t-s-chaos').innerText = t.btnChaos;
 
-            const dist = camera.position.distanceTo(new THREE.Vector3(0, h, 0));
-            headGroup.visible = !(seatView && dist < 15); 
+    // Obiekty 3D (Zapis do UserData używanych przez Hover Menu)
+    grid.userData = { title: t.oGridT, desc: t.oGridD };
+    rack.userData = { title: t.oRackT, desc: t.oRackD };
+    diffuser.userData = { title: t.oDiffT, desc: t.oDiffD };
+    chair.userData = { title: t.oChairT, desc: t.oChairD };
+    housing.userData = { title: t.oVRT, desc: t.oVRD };
 
-            if(mode==='chaos' && Math.random() > 0.8) fire(speakers[Math.floor(Math.random()*speakers.length)]);
-            if(mode==='city' && Math.random() > 0.5) { const s = speakers[Math.floor(Math.random()*speakers.length)]; fire(s); if(Math.random()>0.9 && aCtx) playN(0.5, 0.05, 400); }
-            if(mode==='heli') { 
-                prog += 0.02; const ph = new THREE.Vector3(Math.cos(prog)*180, h+80, Math.sin(prog)*180); 
-                speakers.forEach(s => { if(s.pos.distanceTo(ph) < 120) fire(s); }); 
-                if(Math.random()>0.9 && aCtx) playN(0.1, 0.05, 300+Math.sin(prog)*100);
-            }
-            Object.keys(loops).forEach(k => { if(loops[k] && Math.random()>0.8) fire(groups[k][Math.floor(Math.random()*groups[k].length)]); });
+    panels.forEach(p => {
+        p.mesh.userData = { title: t.oAbsT + " " + p.sideId, desc: t.oAbsD };
+    });
 
-            for(let i=waves.length-1; i>=0; i--) {
-                const w = waves[i]; w.p += w.spd; if(w.p >= 1) { scene.remove(w.m); waves.splice(i,1); continue; }
-                w.m.position.lerpVectors(w.start, headPos, w.p); w.m.scale.setScalar(1 + w.p * 10); w.m.material.opacity = (1 - w.p) * 0.7;
-            }
-            speakers.forEach(s => { if(s.cd > 0) s.cd--; });
-            renderer.render(scene, camera);
-        }
-        animate();
-        window.onresize=()=>{camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight);}
-    </script>
+    trackerBodies.forEach(b => {
+        b.userData = { title: t.oMocapT, desc: t.oMocapD };
+    });
+
+    // Strefy Audio
+    groups['zenit'].forEach(s => {
+        const info = { title: t.zZenitT + ": " + specs['zenit'].name, desc: t.zZenitD };
+        s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
+    });
+    groups['sky'].forEach(s => {
+        const info = { title: t.zSkyT + ": " + specs['sky'].name, desc: t.zSkyD };
+        s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
+    });
+    groups['main'].forEach(s => {
+        const info = { title: t.zMainT + ": " + specs['main'].name, desc: t.zMainD };
+        s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
+    });
+    groups['ground'].forEach(s => {
+        const info = { title: t.zGroundT + ": " + specs['ground'].name, desc: t.zGroundD };
+        s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
+    });
+    groups['nadir'].forEach((s, i) => {
+        const side = i === 0 ? (lang === 'pl' ? " Przód" : " Front") : (lang === 'pl' ? " Tył" : " Rear");
+        const info = { title: t.zNadirT + side + ": " + specs['nadir'].name, desc: t.zNadirD };
+        s.g.userData = info; s.body.userData = info; s.mesh.userData = info;
+    });
+
+    // Jeśli otwarty jest sidebar, wymuś jego odświeżenie tekstów
+    if (pinnedObject && side.style.display === 'block') {
+        sT.innerText = pinnedObject.userData.title;
+        sD.innerText = pinnedObject.userData.desc;
+    }
+}
+
+// Inicjalizacja domyślnego języka na start
+setLanguage('pl');
+
+// Zdarzenia przycisków na modalu
+document.getElementById('btn-pl').onclick = () => {
+    document.getElementById('btn-pl').classList.add('active');
+    document.getElementById('btn-en').classList.remove('active');
+    setLanguage('pl');
+};
+document.getElementById('btn-en').onclick = () => {
+    document.getElementById('btn-en').classList.add('active');
+    document.getElementById('btn-pl').classList.remove('active');
+    setLanguage('en');
+};
+
+// Start Prezentacji (Kliknięcie Krzyżyka)
+document.getElementById('close-btn').onclick = () => {
+    initA(); // Inicjacja silnika audio po interakcji
+    document.getElementById('start-overlay').style.opacity = '0';
+    setTimeout(() => { document.getElementById('start-overlay').style.display = 'none'; }, 500);
+    hasStarted = true;
+};
+
+// ==========================================
+// SYSTEM FAL DŹWIĘKOWYCH & INTERFEJS 
+// ==========================================
+const waves = []; const headPos = new THREE.Vector3(0, h, 0);
+function fire(s) {
+if(s.cd > 0) return; s.cd = 6; 
+if(aCtx) { const sp = specs[s.group]; playT(sp.freq, 'sine', 0.1, 0.05); } 
+const m = new THREE.Mesh(new THREE.TorusGeometry(2, 0.4, 16, 40), new THREE.MeshBasicMaterial({ color: s.color, transparent: true, opacity: 0.7 }));
+m.position.copy(s.pos); m.lookAt(headPos); scene.add(m);
+waves.push({ m:m, start:s.pos.clone(), p:0, spd: 0.012 });
+}
+
+// UKRYTO MYSZKĘ POZA EKRAN NA START
+const ray = new THREE.Raycaster(); const mouse = new THREE.Vector2(-1000, -1000);
+const side = document.getElementById('sidebar'), sT = document.getElementById('side-title'), sD = document.getElementById('side-desc');
+let pinnedObject = null; let isHovering = false;
+
+window.addEventListener('mousemove', (e) => { 
+if(!hasStarted) return;
+mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1; 
+});
+
+window.addEventListener('mousedown', () => {
+if(!hasStarted || seatView || (wallMesh && wallMesh.visible)) return;
+ray.setFromCamera(mouse, camera);
+const hits = ray.intersectObjects(interactive, true);
+let validHit = null;
+for(let i = 0; i < hits.length; i++) {
+let t = hits[i].object;
+let vis = true, p = t;
+while(p) { if(p.visible===false) { vis=false; break; } p = p.parent; }
+if(!vis) continue;
+
+p = t;
+while(p && !p.userData.title) p = p.parent;
+if(p && p.userData.title) { validHit = p; break; }
+}
+if(validHit) {
+pinnedObject = validHit; side.style.display='block';
+sT.innerText=validHit.userData.title; sD.innerText=validHit.userData.desc;
+} else { pinnedObject = null; side.style.display='none'; }
+});
+
+function stopZones() {
+Object.keys(loops).forEach(k => loops[k] = false);
+document.querySelectorAll('.zone').forEach(b => b.classList.remove('looping'));
+}
+
+document.querySelectorAll('.zone').forEach(b => { 
+b.onclick = () => { initA(); const id=b.getAttribute('data-id'); loops[id]=!loops[id]; b.classList.toggle('looping'); }; 
+});
+
+let mode=null, prog=0;
+document.getElementById('btn-heli').onclick = function() { initA(); stopZones(); mode=mode==='heli'?null:'heli'; this.classList.toggle('active'); document.getElementById('btn-chaos').classList.remove('active'); document.getElementById('btn-city').classList.remove('active'); };
+document.getElementById('btn-chaos').onclick = function() { initA(); stopZones(); mode=mode==='chaos'?null:'chaos'; this.classList.toggle('active'); document.getElementById('btn-heli').classList.remove('active'); document.getElementById('btn-city').classList.remove('active'); };
+document.getElementById('btn-city').onclick = function() { initA(); stopZones(); mode=mode==='city'?null:'city'; this.classList.toggle('active'); document.getElementById('btn-heli').classList.remove('active'); document.getElementById('btn-chaos').classList.remove('active'); };
+
+document.getElementById('btn-walls').onclick = function() { wallMesh.visible=!wallMesh.visible; this.classList.toggle('active'); if(wallMesh.visible) { side.style.display='none'; pinnedObject=null; } };
+document.getElementById('btn-floor').onclick = function() { grid.visible=!grid.visible; this.classList.toggle('active'); };
+document.getElementById('btn-rack').onclick = function() { rack.visible=!rack.visible; this.classList.toggle('active'); };
+document.getElementById('btn-trackers').onclick = function() { trackers.visible=!trackers.visible; this.classList.toggle('active'); };
+document.getElementById('btn-diffuser').onclick = function() { diffuser.visible=!diffuser.visible; this.classList.toggle('active'); };
+document.getElementById('btn-panels').onclick = function() { panels.forEach(p=>p.mesh.visible=!p.mesh.visible); this.classList.toggle('active'); };
+document.getElementById('btn-chair').onclick = function() { chair.visible=!chair.visible; this.classList.toggle('active'); };
+
+let vrEnabled = true;
+document.getElementById('btn-vr').onclick = function() { vrEnabled = !vrEnabled; vrGroup.visible = vrEnabled; this.classList.toggle('active'); };
+
+let seatView = false;
+document.getElementById('btn-seatview').onclick = function() {
+seatView = !seatView; this.classList.toggle('active');
+document.getElementById('btn-outview').classList.remove('active');
+if(seatView) { 
+if(!wallMesh.visible) { wallMesh.visible = true; document.getElementById('btn-walls').classList.add('active'); }
+camera.fov = 60; camera.updateProjectionMatrix();
+controls.target.set(0, h, 0); camera.position.set(0, h, 5); 
+side.style.display='none'; pinnedObject=null;
+} else { 
+camera.fov = 35; camera.updateProjectionMatrix(); camera.position.copy(startCamPos); 
+}
+};
+
+document.getElementById('btn-outview').onclick = function() {
+seatView = false; camera.fov = 35; camera.updateProjectionMatrix();
+document.getElementById('btn-seatview').classList.remove('active');
+this.classList.toggle('active'); controls.target.set(0,0,0); camera.position.set(2000, 1500, 2000);
+};
+
+document.getElementById('reset-btn').onclick = function() {
+seatView = false; document.getElementById('btn-seatview').classList.remove('active');
+document.getElementById('btn-outview').classList.remove('active');
+camera.fov = 35; camera.updateProjectionMatrix();
+camera.position.copy(startCamPos); controls.target.set(0,0,0);
+wallMesh.visible = false; document.getElementById('btn-walls').classList.remove('active');
+grid.visible = true; document.getElementById('btn-floor').classList.add('active');
+rack.visible = true; document.getElementById('btn-rack').classList.add('active');
+panels.forEach(p=>p.mesh.visible=true); document.getElementById('btn-panels').classList.add('active');
+vrEnabled = true; vrGroup.visible = true; document.getElementById('btn-vr').classList.add('active');
+mode = null; stopZones();
+document.querySelectorAll('.sim').forEach(b => b.classList.remove('active'));
+pinnedObject = null; side.style.display='none';
+};
+
+function animate() {
+requestAnimationFrame(animate); 
+
+// Kiedy modal z wyborem języka jest widoczny - tylko powoli kręć kamerą z tyłu bez interakcji
+if (!hasStarted) {
+    controls.autoRotate = true;
+    controls.update();
+    renderer.render(scene, camera);
+    return;
+}
+
+// --- SKANOWANIE OBIEKTÓW CO KLATKĘ ---
+if(seatView || (wallMesh && wallMesh.visible)) {
+side.style.display='none';
+document.body.style.cursor = 'default';
+isHovering = false;
+} else {
+ray.setFromCamera(mouse, camera);
+const hits = ray.intersectObjects(interactive, true);
+
+let validHit = null;
+for(let i = 0; i < hits.length; i++) {
+let t = hits[i].object;
+let vis = true, p = t;
+while(p) { if(p.visible===false) { vis=false; break; } p = p.parent; }
+if(!vis) continue;
+
+p = t;
+while(p && !p.userData.title) p = p.parent;
+if(p && p.userData.title) { validHit = p; break; }
+}
+
+isHovering = (validHit !== null);
+
+if(!pinnedObject) {
+if(validHit) {
+document.body.style.cursor = 'pointer';
+side.style.display = 'block';
+sT.innerText = validHit.userData.title;
+sD.innerText = validHit.userData.desc;
+} else { 
+document.body.style.cursor = 'default'; 
+side.style.display = 'none'; 
+}
+} else {
+document.body.style.cursor = validHit ? 'pointer' : 'default';
+}
+}
+
+// AUTO-OBRÓT ZATRZYMUJE SIĘ PODCZAS HOVERA LUB SYMULACJI
+controls.autoRotate = !pinnedObject && !mode && !seatView && !isHovering;
+controls.update();
+
+const dist = camera.position.distanceTo(new THREE.Vector3(0, h, 0));
+headGroup.visible = !(seatView && dist < 15); 
+
+if(mode==='chaos' && Math.random() > 0.8) fire(speakers[Math.floor(Math.random()*speakers.length)]);
+if(mode==='city' && Math.random() > 0.5) { const s = speakers[Math.floor(Math.random()*speakers.length)]; fire(s); if(Math.random()>0.9 && aCtx) playN(0.5, 0.05, 400); }
+if(mode==='heli') { 
+prog += 0.02; const ph = new THREE.Vector3(Math.cos(prog)*180, h+80, Math.sin(prog)*180); 
+speakers.forEach(s => { if(s.pos.distanceTo(ph) < 120) fire(s); }); 
+if(Math.random()>0.9 && aCtx) playN(0.1, 0.05, 300+Math.sin(prog)*100);
+}
+Object.keys(loops).forEach(k => { if(loops[k] && Math.random()>0.8) fire(groups[k][Math.floor(Math.random()*groups[k].length)]); });
+
+for(let i=waves.length-1; i>=0; i--) {
+const w = waves[i]; w.p += w.spd; if(w.p >= 1) { scene.remove(w.m); waves.splice(i,1); continue; }
+w.m.position.lerpVectors(w.start, headPos, w.p); w.m.scale.setScalar(1 + w.p * 10); w.m.material.opacity = (1 - w.p) * 0.7;
+}
+speakers.forEach(s => { if(s.cd > 0) s.cd--; });
+renderer.render(scene, camera);
+}
+animate();
+window.onresize=()=>{camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight);}
+</script>
 </body>
 </html>
